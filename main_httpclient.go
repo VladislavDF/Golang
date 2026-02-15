@@ -1,3 +1,5 @@
+//go:build httpclient
+
 package main
 
 import (
