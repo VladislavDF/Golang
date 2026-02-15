@@ -1,2 +1,3 @@
-"module golang 
-go 1.22" 
+module golang 
+ 
+go 1.22 
