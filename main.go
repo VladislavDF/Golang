@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io"
+	"math"
 	"net/http"
 	"strconv"
 	"strings"
@@ -81,15 +82,17 @@ func main() {
 		// Сброс счетчика ошибок при успешном получении данных
 		errorCount = 0
 
-		// 1. Проверка Load Average - выводим без десятичных знаков
+		// 1. Проверка Load Average
 		if loadAvg > 30 {
 			fmt.Printf("Load Average is too high: %.0f\n", loadAvg)
 		}
 
-		// 2. Проверка памяти (80%)
+		// 2. Проверка памяти (80%) - исправлено округление
 		memoryPercent := float64(usedMemory) / float64(totalMemory) * 100
 		if memoryPercent > 80 {
-			fmt.Printf("Memory usage too high: %.0f%%\n", memoryPercent)
+			// Используем math.Floor для округления вниз
+			roundedPercent := math.Floor(memoryPercent)
+			fmt.Printf("Memory usage too high: %.0f%%\n", roundedPercent)
 		}
 
 		// 3. Проверка диска (90%)
@@ -100,11 +103,11 @@ func main() {
 			fmt.Printf("Free disk space is too low: %d Mb left\n", freeDiskMB)
 		}
 
-		// 4. Проверка сети (90%) - ИСПРАВЛЕНО: убрали умножение на 8
+		// 4. Проверка сети (90%) - исправлено условие
 		bandwidthPercent := float64(usedBandwidth) / float64(totalBandwidth) * 100
-		if bandwidthPercent > 90 {
+		// Используем >= 90 вместо > 90
+		if bandwidthPercent >= 90 {
 			freeBandwidth := totalBandwidth - usedBandwidth
-			// Просто делим на 1_000_000 без умножения на 8
 			freeBandwidthMbits := float64(freeBandwidth) / 1_000_000
 			fmt.Printf("Network bandwidth usage high: %.0f Mbit/s available\n", freeBandwidthMbits)
 		}
