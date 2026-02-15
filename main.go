@@ -82,8 +82,8 @@ func main() {
 		// Сброс счетчика ошибок при успешном получении данных
 		errorCount = 0
 
-		// 1. Проверка Load Average - ИСПРАВЛЕНО: используем >= 30
-		if loadAvg >= 30 {
+		// 1. Проверка Load Average - ИСПРАВЛЕНО: строго больше 30
+		if loadAvg > 30 {
 			fmt.Printf("Load Average is too high: %.0f\n", loadAvg)
 		}
 
@@ -103,7 +103,7 @@ func main() {
 			fmt.Printf("Free disk space is too low: %d Mb left\n", freeDiskMB)
 		}
 
-		// 4. Проверка сети (90%) - ИСПРАВЛЕНО: используем >= 90
+		// 4. Проверка сети (90%)
 		bandwidthPercent := float64(usedBandwidth) / float64(totalBandwidth) * 100
 		if bandwidthPercent >= 90 {
 			freeBandwidth := totalBandwidth - usedBandwidth
