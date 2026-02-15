@@ -213,7 +213,7 @@ func validatePod(filePath string) error {
 	return nil
 }
 
-func main() {
+func runValidator() {
 	// Проверяем аргументы командной строки
 	if len(os.Args) != 2 {
 		fmt.Println("Usage: yamlvalid <path-to-yaml-file>")
