@@ -82,7 +82,7 @@ func main() {
 		// Сброс счетчика ошибок при успешном получении данных
 		errorCount = 0
 
-		// 1. Проверка Load Average - ИСПРАВЛЕНО: строго больше 30
+		// 1. Проверка Load Average
 		if loadAvg > 30 {
 			fmt.Printf("Load Average is too high: %.0f\n", loadAvg)
 		}
@@ -90,7 +90,6 @@ func main() {
 		// 2. Проверка памяти (80%)
 		memoryPercent := float64(usedMemory) / float64(totalMemory) * 100
 		if memoryPercent > 80 {
-			// Округляем вниз
 			roundedPercent := math.Floor(memoryPercent)
 			fmt.Printf("Memory usage too high: %.0f%%\n", roundedPercent)
 		}
@@ -103,12 +102,14 @@ func main() {
 			fmt.Printf("Free disk space is too low: %d Mb left\n", freeDiskMB)
 		}
 
-		// 4. Проверка сети (90%)
+		// 4. Проверка сети (90%) - ИСПРАВЛЕНО округление вниз
 		bandwidthPercent := float64(usedBandwidth) / float64(totalBandwidth) * 100
 		if bandwidthPercent >= 90 {
 			freeBandwidth := totalBandwidth - usedBandwidth
 			freeBandwidthMbits := float64(freeBandwidth) / 1_000_000
-			fmt.Printf("Network bandwidth usage high: %.0f Mbit/s available\n", freeBandwidthMbits)
+			// Округляем вниз до целого числа
+			roundedBandwidth := math.Floor(freeBandwidthMbits)
+			fmt.Printf("Network bandwidth usage high: %.0f Mbit/s available\n", roundedBandwidth)
 		}
 
 		// Ждем перед следующим запросом
